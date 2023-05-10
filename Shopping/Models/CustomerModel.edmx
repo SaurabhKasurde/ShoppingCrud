@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ShoppingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CustomerTable">
+          <Key>
+            <PropertyRef Name="CID" />
+          </Key>
+          <Property Name="CID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CName" Type="varchar" MaxLength="50" />
+          <Property Name="Contact" Type="int" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OTable">
+          <Key>
+            <PropertyRef Name="OID" />
+          </Key>
+          <Property Name="OID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PName" Type="varchar" MaxLength="50" />
+          <Property Name="CName" Type="varchar" MaxLength="50" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Total_Price" Type="int" />
+        </EntityType>
+        <EntityType Name="ProductTable1">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PName" Type="varchar" MaxLength="50" />
+          <Property Name="Category" Type="varchar" MaxLength="50" />
+          <Property Name="Price" Type="int" />
+          <Property Name="Brand" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_OTable_CustomerTable">
+          <End Role="CustomerTable" Type="Self.CustomerTable" Multiplicity="0..1" />
+          <End Role="OTable" Type="Self.OTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerTable">
+              <PropertyRef Name="CID" />
+            </Principal>
+            <Dependent Role="OTable">
+              <PropertyRef Name="CName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OTable_ProductTable1">
+          <End Role="ProductTable1" Type="Self.ProductTable1" Multiplicity="0..1" />
+          <End Role="OTable" Type="Self.OTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTable1">
+              <PropertyRef Name="PID" />
+            </Principal>
+            <Dependent Role="OTable">
+              <PropertyRef Name="PName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoppingModelStoreContainer">
+          <EntitySet Name="CustomerTable" EntityType="Self.CustomerTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OTable" EntityType="Self.OTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductTable1" EntityType="Self.ProductTable1" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_OTable_CustomerTable" Association="Self.FK_OTable_CustomerTable">
+            <End Role="CustomerTable" EntitySet="CustomerTable" />
+            <End Role="OTable" EntitySet="OTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OTable_ProductTable1" Association="Self.FK_OTable_ProductTable1">
+            <End Role="ProductTable1" EntitySet="ProductTable1" />
+            <End Role="OTable" EntitySet="OTable" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShoppingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CustomerTable">
+          <Key>
+            <PropertyRef Name="CID" />
+          </Key>
+          <Property Name="CID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contact" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OTables" Relationship="Self.FK_OTable_CustomerTable" FromRole="CustomerTable" ToRole="OTable" />
+        </EntityType>
+        <EntityType Name="OTable">
+          <Key>
+            <PropertyRef Name="OID" />
+          </Key>
+          <Property Name="OID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Total_Price" Type="Int32" />
+          <NavigationProperty Name="CustomerTable" Relationship="Self.FK_OTable_CustomerTable" FromRole="OTable" ToRole="CustomerTable" />
+          <NavigationProperty Name="ProductTable1" Relationship="Self.FK_OTable_ProductTable1" FromRole="OTable" ToRole="ProductTable1" />
+        </EntityType>
+        <EntityType Name="ProductTable1">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Int32" />
+          <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OTables" Relationship="Self.FK_OTable_ProductTable1" FromRole="ProductTable1" ToRole="OTable" />
+        </EntityType>
+        <Association Name="FK_OTable_CustomerTable">
+          <End Role="CustomerTable" Type="Self.CustomerTable" Multiplicity="0..1" />
+          <End Role="OTable" Type="Self.OTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerTable">
+              <PropertyRef Name="CID" />
+            </Principal>
+            <Dependent Role="OTable">
+              <PropertyRef Name="CName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OTable_ProductTable1">
+          <End Role="ProductTable1" Type="Self.ProductTable1" Multiplicity="0..1" />
+          <End Role="OTable" Type="Self.OTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTable1">
+              <PropertyRef Name="PID" />
+            </Principal>
+            <Dependent Role="OTable">
+              <PropertyRef Name="PName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoppingEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CustomerTables" EntityType="Self.CustomerTable" />
+          <EntitySet Name="OTables" EntityType="Self.OTable" />
+          <EntitySet Name="ProductTable1" EntityType="Self.ProductTable1" />
+          <AssociationSet Name="FK_OTable_CustomerTable" Association="Self.FK_OTable_CustomerTable">
+            <End Role="CustomerTable" EntitySet="CustomerTables" />
+            <End Role="OTable" EntitySet="OTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OTable_ProductTable1" Association="Self.FK_OTable_ProductTable1">
+            <End Role="ProductTable1" EntitySet="ProductTable1" />
+            <End Role="OTable" EntitySet="OTables" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShoppingModelStoreContainer" CdmEntityContainer="ShoppingEntities2">
+          <EntitySetMapping Name="CustomerTables">
+            <EntityTypeMapping TypeName="ShoppingModel.CustomerTable">
+              <MappingFragment StoreEntitySet="CustomerTable">
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="CName" ColumnName="CName" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OTables">
+            <EntityTypeMapping TypeName="ShoppingModel.OTable">
+              <MappingFragment StoreEntitySet="OTable">
+                <ScalarProperty Name="OID" ColumnName="OID" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="CName" ColumnName="CName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Total_Price" ColumnName="Total_Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductTable1">
+            <EntityTypeMapping TypeName="ShoppingModel.ProductTable1">
+              <MappingFragment StoreEntitySet="ProductTable1">
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
